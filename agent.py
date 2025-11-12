@@ -2,6 +2,8 @@
 # AGENT CLASS
 # ========================================
 
+import numpy as np
+
 class Agent:
     """Represents a single agent in the RPS world."""
 
