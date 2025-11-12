@@ -35,7 +35,7 @@ class World:
         """Move agents and process interactions."""
         self.step_count += 1
         for agent in self.agents:
-            agent.move(self.box_size, SPEED, self.wrap)
+            agent.move(self.box_size, self.speed, self.wrap)
         self._process_interactions()
 
     def _process_interactions(self):

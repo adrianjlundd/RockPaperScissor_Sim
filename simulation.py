@@ -5,6 +5,8 @@
 from world import World
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import matplotlix.image as mpimg
 
 class Simulation:
    
@@ -21,7 +23,21 @@ class Simulation:
         self.ax.set_xticks([])
         self.ax.set_yticks([])
 
-        self.scatter = self.ax.scatter([], [], s=30)
+        self.images = {
+            "Rock": mpimg.imread("images/rock.png"),
+            "Paper": mpimg.imread("images/paper.png"),
+            "Scissors": mpimg.imread("images/scissors.png")
+        }
+
+        # Store artists objects for each agent
+        self.agent_artists = []
+        for agent in self.world.agents:
+            img = OffsetImage(self.images[agent.kind], zoom=0.05)
+            ab = AnnotationBbox(img, agent.pos, frameon=False)
+            self.ax.add_artist(ab)
+            self.agent_artists.append(ab)
+
+        
         self.title = self.ax.text(0.02, 1.02, "", transform=self.ax.transAxes)
 
     def _update_plot(self, frame):
