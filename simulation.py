@@ -16,8 +16,8 @@ class Simulation:
 
         # Set up plotting
         self.fig, self.ax = plt.subplots(figsize=(6, 6))
-        self.ax.set_xlim(0, BOX_SIZE)
-        self.ax.set_ylim(0, BOX_SIZE)
+        self.ax.set_xlim(0, self.config["BOX_SIZE"])
+        self.ax.set_ylim(0, self.config["BOX_SIZE"])
         self.ax.set_xticks([])
         self.ax.set_yticks([])
 
