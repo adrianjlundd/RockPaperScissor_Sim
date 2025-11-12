@@ -24,9 +24,9 @@ class Simulation:
         self.ax.set_yticks([])
 
         self.images = {
-            "Rock": mpimg.imread("images/rock.png"),
-            "Paper": mpimg.imread("images/paper.png"),
-            "Scissors": mpimg.imread("images/scissors.png")
+            "Rock": mpimg.imread("data/rock.png"),
+            "Paper": mpimg.imread("data/paper.png"),
+            "Scissors": mpimg.imread("data/scissor.png")
         }
 
         # Store artists objects for each agent
