@@ -1,5 +1,5 @@
 # ========================================
-# CONFIGURATION
+# MAIN
 # ========================================
 
 import numpy as np
@@ -16,19 +16,14 @@ CONFIG  = {
     "FRACTIONS": (0.33, 0.33, 0.34),  # (Rock, Paper, Scissors)
     "MAX_STEPS": 5000,
     "WRAP": True,
-    "SEED": 42
+    
 
 }
 
-np.random.seed(SEED)
+np.random.seed(42)  # For reproducibility
 
 
-
-
-# ========================================
-# MAIN
-# ========================================
 
 if __name__ == "__main__":
-    sim = Simulation()
+    sim = Simulation(CONFIG)
     sim.run()
