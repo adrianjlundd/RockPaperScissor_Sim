@@ -47,7 +47,7 @@ class Simulation:
         """Start the animation."""
         self.anim = FuncAnimation(
             self.fig, self._update_plot,
-            frames=range(MAX_STEPS),
+            frames=range(self.config["MAX_STEPS"]),
             interval=1, blit=False
         )
         plt.show()
