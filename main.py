@@ -12,10 +12,11 @@ CONFIG  = {
     "BOX_SIZE": 1.0,
     "SPEED": 0.01,
     "INTERACTION_RADIUS": 0.02,
-    "N_AGENTS": 300,
+    "N_AGENTS": 10,
     "FRACTIONS": (0.33, 0.33, 0.34),  # (Rock, Paper, Scissors)
     "MAX_STEPS": 5000,
     "WRAP": True,
+    "IMAGE_ZOOM": 0.60,
     
 
 }

@@ -51,18 +51,35 @@ class Simulation:
         self.world.update()
         # Update image positions and visibility to follow agents.
         for agent, artist in zip(self.world.agents, self.agent_artists):
-            # Update the annotation position
+            # Update the annotation position using the public setter
+            # so Matplotlib knows the artist changed.
             try:
-                artist.xy = tuple(agent.pos)
+                artist.set_xy(tuple(agent.pos))
             except Exception:
-                # Fallback if the attribute isn't present
-                artist.set_offsets([tuple(agent.pos)])
+                # Fallback in case set_xy isn't available on this Matplotlib
+                # version (older/newer variants). Try assigning attribute.
+                try:
+                    artist.xy = tuple(agent.pos)
+                except Exception:
+                    pass
+
             artist.set_visible(agent.alive)
+
+            # Update image to match agent kind (in case it changed due to
+            # interactions). `offsetbox` holds the OffsetImage; call the
+            # OffsetImage.set_data method when available.
+            try:
+                off = getattr(artist, "offsetbox", None)
+                if off is not None and hasattr(off, "set_data"):
+                    off.set_data(self.images[agent.kind])
+            except Exception:
+                # Ignore image-update failures to avoid crashing the animation.
+                pass
 
         counts = self.world.count_alive()
         self.title.set_text(
             f"Step {self.world.step_count} — "
-            f"R:{counts['Rock']} P:{counts['Paper']} S:{counts['Scissors']}"
+            f"Rock:{counts['Rock']} Paper:{counts['Paper']} Scissors:{counts['Scissors']}"
         )
 
         if self.world.one_species_left():

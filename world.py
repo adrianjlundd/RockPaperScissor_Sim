@@ -62,9 +62,11 @@ class World:
                     if a1.kind == a2.kind:
                         continue
                     elif Agent.beats(a1.kind, a2.kind):
-                        a2.alive = False
+                        # Instead of killing the loser, convert its kind to the
+                        # winner. This preserves the total number of agents.
+                        a2.kind = a1.kind
                     elif Agent.beats(a2.kind, a1.kind):
-                        a1.alive = False
+                        a1.kind = a2.kind
 
     def get_alive_data(self):
         """Return arrays of positions and colors for alive agents."""
