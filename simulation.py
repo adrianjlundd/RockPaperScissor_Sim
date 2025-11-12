@@ -11,7 +11,8 @@ class Simulation:
     """Runs and visualizes the RPS world simulation."""
 
     def __init__(self, config):
-        self.world = World(N_AGENTS)
+        self.config = config
+        self.world = World(config)
 
         # Set up plotting
         self.fig, self.ax = plt.subplots(figsize=(6, 6))

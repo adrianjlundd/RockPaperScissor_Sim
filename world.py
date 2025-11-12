@@ -8,11 +8,16 @@ from agent import Agent
 class World:
     """Holds all agents and handles movement, interactions, and plotting."""
 
-    def __init__(self, n_agents: int):
+    def __init__(self, config):
+        self.config = config
+        self.box_size = config["BOX_SIZE"]
+        self.wrap = config["WRAP"]
+        self.interaction_radius = config["INTERACTION_RADIUS"]
+        self.speed = config["SPEED"]
+        self.fractions = config["FRACTIONS"]
+
+        n_agents = config["N_AGENTS"]
         self.agents = self._initialize_agents(n_agents)
-        self.box_size = BOX_SIZE
-        self.wrap = WRAP
-        self.interaction_radius = INTERACTION_RADIUS
         self.step_count = 0
 
     def _initialize_agents(self, n: int):
