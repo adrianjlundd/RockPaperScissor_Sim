@@ -6,7 +6,7 @@ from world import World
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-import matplotlix.image as mpimg
+import matplotlib.image as mpimg
 
 class Simulation:
    
