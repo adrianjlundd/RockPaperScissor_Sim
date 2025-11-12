@@ -22,13 +22,13 @@ class World:
 
     def _initialize_agents(self, n: int):
         """Randomly initialize agents according to FRACTIONS."""
-        n_r, n_p, n_s = np.round(np.array(FRACTIONS) * n).astype(int)
+        n_r, n_p, n_s = np.round(np.array(self.fractions) * n).astype(int)
         while n_r + n_p + n_s < n:
             n_r += 1
         kinds = (["Rock"] * n_r) + (["Paper"] * n_p) + (["Scissors"] * n_s)
         np.random.shuffle(kinds)
 
-        positions = np.random.rand(n, 2) * BOX_SIZE
+        positions = np.random.rand(n, 2) * self.box_size
         return [Agent(x, y, kind) for (x, y), kind in zip(positions, kinds)]
 
     def update(self):
