@@ -2,6 +2,9 @@
 # WORLD CLASS
 # ========================================
 
+import numpy as np
+from agent import Agent
+
 class World:
     """Holds all agents and handles movement, interactions, and plotting."""
 
