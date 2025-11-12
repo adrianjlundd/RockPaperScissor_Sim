@@ -15,6 +15,7 @@ class Simulation:
     def __init__(self, config):
         self.config = config
         self.world = World(config)
+        
 
         # Set up plotting
         self.fig, self.ax = plt.subplots(figsize=(6, 6))
@@ -29,11 +30,17 @@ class Simulation:
             "Scissors": mpimg.imread("data/scissor.png")
         }
 
-        # Store artists objects for each agent
+        # Choose image zoom size (can be overridden in config)
+        self.image_zoom = self.config.get("IMAGE_ZOOM", 0.2)
+        self.ax.set_facecolor("#111111")
+
+        # Create an AnnotationBbox artist for each agent and store it so we can
+        # update positions every frame. Start visible only if the agent is alive.
         self.agent_artists = []
         for agent in self.world.agents:
-            img = OffsetImage(self.images[agent.kind], zoom=0.05)
-            ab = AnnotationBbox(img, agent.pos, frameon=False)
+            img = OffsetImage(self.images[agent.kind], zoom=self.image_zoom)
+            ab = AnnotationBbox(img, tuple(agent.pos), frameon=False)
+            ab.set_visible(agent.alive)
             self.ax.add_artist(ab)
             self.agent_artists.append(ab)
 
@@ -42,10 +49,15 @@ class Simulation:
 
     def _update_plot(self, frame):
         self.world.update()
-        positions, colors, kinds = self.world.get_alive_data()
-        self.scatter.set_offsets(positions)
-        self.scatter.set_facecolor(colors)
-        self.scatter.set_edgecolor("k")
+        # Update image positions and visibility to follow agents.
+        for agent, artist in zip(self.world.agents, self.agent_artists):
+            # Update the annotation position
+            try:
+                artist.xy = tuple(agent.pos)
+            except Exception:
+                # Fallback if the attribute isn't present
+                artist.set_offsets([tuple(agent.pos)])
+            artist.set_visible(agent.alive)
 
         counts = self.world.count_alive()
         self.title.set_text(
@@ -57,7 +69,7 @@ class Simulation:
             self.title.set_text(self.title.get_text() + " — One species left!")
             self.anim.event_source.stop()
 
-        return self.scatter,
+        return self.agent_artists,
 
     def run(self):
         """Start the animation."""
