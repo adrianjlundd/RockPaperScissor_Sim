@@ -39,7 +39,9 @@ class Simulation:
         self.agent_artists = []
         for agent in self.world.agents:
             img = OffsetImage(self.images[agent.kind], zoom=self.image_zoom)
-            ab = AnnotationBbox(img, tuple(agent.pos), frameon=False)
+            # Use data coordinates for the annotation so xy refers to data
+            # coordinates on the axes (this makes updating xy later reliable).
+            ab = AnnotationBbox(img, tuple(agent.pos), xycoords='data', frameon=False)
             ab.set_visible(agent.alive)
             self.ax.add_artist(ab)
             self.agent_artists.append(ab)
@@ -50,36 +52,35 @@ class Simulation:
     def _update_plot(self, frame):
         self.world.update()
         # Update image positions and visibility to follow agents.
+        # Try to get renderer for updating AnnotationBbox positions
+        # If not available, just update xy and matplotlib will handle it on redraw
+        try:
+            renderer = self.fig.canvas.get_renderer()
+        except AttributeError:
+            renderer = None
+        
         for agent, artist in zip(self.world.agents, self.agent_artists):
-            # Update the annotation position using the public setter
-            # so Matplotlib knows the artist changed.
-            try:
-                artist.set_xy(tuple(agent.pos))
-            except Exception:
-                # Fallback in case set_xy isn't available on this Matplotlib
-                # version (older/newer variants). Try assigning attribute.
-                try:
-                    artist.xy = tuple(agent.pos)
-                except Exception:
-                    pass
-
+            # Update the annotation position - AnnotationBbox uses .xy for position
+            artist.xy = tuple(agent.pos)
+            # Update the annotation bbox position using the renderer if available
+            if renderer is not None:
+                artist.update_positions(renderer)
+            
             artist.set_visible(agent.alive)
 
             # Update image to match agent kind (in case it changed due to
-            # interactions). `offsetbox` holds the OffsetImage; call the
-            # OffsetImage.set_data method when available.
-            try:
-                off = getattr(artist, "offsetbox", None)
-                if off is not None and hasattr(off, "set_data"):
-                    off.set_data(self.images[agent.kind])
-            except Exception:
-                # Ignore image-update failures to avoid crashing the animation.
-                pass
+            # interactions). `offsetbox` holds the OffsetImage.
+            off = artist.offsetbox
+            if off is not None:
+                # Update the image data when kind changes
+                off.set_data(self.images[agent.kind])
 
         counts = self.world.count_alive()
+        total = sum(counts.values())
         self.title.set_text(
             f"Step {self.world.step_count} — "
-            f"Rock:{counts['Rock']} Paper:{counts['Paper']} Scissors:{counts['Scissors']}"
+            f"Rock:{counts['Rock']} Paper:{counts['Paper']} Scissors:{counts['Scissors']} "
+            f"(Total: {total})"
         )
 
         if self.world.one_species_left():

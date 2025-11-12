@@ -10,7 +10,7 @@ from simulation import Simulation
 CONFIG  = {
 
     "BOX_SIZE": 1.0,
-    "SPEED": 0.01,
+    "SPEED": 0.2,
     "INTERACTION_RADIUS": 0.02,
     "N_AGENTS": 10,
     "FRACTIONS": (0.33, 0.33, 0.34),  # (Rock, Paper, Scissors)

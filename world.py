@@ -39,11 +39,17 @@ class World:
         self._process_interactions()
 
     def _process_interactions(self):
-        """Check for collisions and apply RPS elimination."""
+        """Check for collisions and apply RPS transformation (loser becomes winner type)."""
+        # Only process interactions between alive agents
         alive_agents = [a for a in self.agents if a.alive]
         n = len(alive_agents)
         if n <= 1:
             return
+
+        # Track which agents need to be converted (loser -> winner type)
+        # Use a dict to track conversions: agent_id -> new_kind
+        # An agent can be converted only once per step (last conversion wins)
+        conversions = {}
 
         for i in range(n):
             a1 = alive_agents[i]
@@ -62,11 +68,18 @@ class World:
                     if a1.kind == a2.kind:
                         continue
                     elif Agent.beats(a1.kind, a2.kind):
-                        # Instead of killing the loser, convert its kind to the
-                        # winner. This preserves the total number of agents.
-                        a2.kind = a1.kind
+                        # a1 beats a2: a2 becomes a1's type
+                        # Note: a2 might be converted multiple times, but we'll apply
+                        # the last conversion (or use the original kind if not converted)
+                        conversions[id(a2)] = a1.kind
                     elif Agent.beats(a2.kind, a1.kind):
-                        a1.kind = a2.kind
+                        # a2 beats a1: a1 becomes a2's type
+                        conversions[id(a1)] = a2.kind
+
+        # Apply all conversions at once (last conversion for each agent wins)
+        for agent in alive_agents:
+            if id(agent) in conversions:
+                agent.kind = conversions[id(agent)]
 
     def get_alive_data(self):
         """Return arrays of positions and colors for alive agents."""
@@ -79,7 +92,7 @@ class World:
         return positions, colors, kinds
 
     def count_alive(self):
-        """Count remaining agents of each kind."""
+        """Count agents of each kind (all agents are always alive now)."""
         counts = {k: 0 for k in Agent.TYPES}
         for a in self.agents:
             if a.alive:
