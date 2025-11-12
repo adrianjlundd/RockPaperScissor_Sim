@@ -1,7 +1,10 @@
-from world import World
 # ========================================
 # SIMULATION CLASS
 # ========================================
+
+from world import World
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 class Simulation:
    
