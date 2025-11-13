@@ -3,7 +3,10 @@
 This is a simple, self-contained Rock–Paper–Scissors (RPS) world built with `pygame`. Agents (Rock, Paper, Scissors) move around the screen, bounce off edges, and convert each other on collision according to RPS rules. The simulation ends when only one species remains. Press `R` to restart.
 
 
-**Watch the simulation on YouTube:** [Rock Paper Scissors Simulation](https://youtu.be/YI2b4zbsgaQ)
+## Watch the Simulation on YouTube  
+Press the image below to watch or this [link](https://youtu.be/YI2b4zbsgaQ):
+
+[![Watch the simulation on YouTube](https://img.youtube.com/vi/YI2b4zbsgaQ/0.jpg)](https://youtu.be/YI2b4zbsgaQ)
 
 ## Features
 - Object-oriented design with an `Agent` class
