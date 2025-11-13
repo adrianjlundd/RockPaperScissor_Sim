@@ -6,7 +6,7 @@ This is a simple, self-contained Rock–Paper–Scissors (RPS) world built with 
 ## Watch the Simulation on YouTube  
 Press the image below to watch or this [link](https://youtu.be/YI2b4zbsgaQ):
 
-[![Watch the simulation on YouTube](https://img.youtube.com/vi/YI2b4zbsgaQ/0.jpg)](https://youtu.be/YI2b4zbsgaQ)
+[![Watch the simulation on YouTube](data/interface.png)](https://youtu.be/YI2b4zbsgaQ)
 
 ## Features
 - Object-oriented design with an `Agent` class
